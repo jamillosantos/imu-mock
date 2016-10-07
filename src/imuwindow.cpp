@@ -51,31 +51,46 @@ void ImuWindow::runUpdateTrampolin()
 	{
 		imuData = this->imu.retrieve();
 
+		VERBOSE("Accelerometer:");
+			VERBOSEB("-- x: " << imuData.accelerometer.x());
+			VERBOSEB("-- y: " << imuData.accelerometer.y());
+			VERBOSEB("-- z: " << imuData.accelerometer.z());
+		data::Vector3d a(imuData.accelerometer);
+		/*
+		VERBOSE("Gyroscope:");
+			VERBOSEB("-- x: " << imuData.gyro.x());
+			VERBOSEB("-- y: " << imuData.gyro.y());
+			VERBOSEB("-- z: " << imuData.gyro.z());
 		this->_accelerometerCube->rotate().xyz(
-			imuData.accelerometer.x() + 360.0 - this->_offset.x(),
-			imuData.accelerometer.y() + 360.0 - this->_offset.y(),
-			imuData.accelerometer.z() + 360.0 - this->_offset.z()
+			std::asin(a.x() / GRAVITY)
+			std::asin(a.y() / GRAVITY)
+			std::acos(a.z() / GRAVITY)
 		);
-		this->_gyroCube->rotate().xyz(
-			imuData.gyro.x() + 360.0f - this->_offset.x(),
-			imuData.gyro.y() + 360.0f - this->_offset.y(),
-			imuData.gyro.z() + 360.0f - this->_offset.z()
+		*/
+
+		this->_accelerometerCube->rotate().xyz(
+			(a.z() > 0 ? 1 : -1) * std::atan(a.y() / std::sqrt(a.x()*a.x() + a.z()*a.z())) + M_PI_2,
+			(a.z() > 0 ? 1 : -1) * std::atan(a.x() / std::sqrt(a.y()*a.y() + a.z()*a.z())),
+			0
 		);
-		this->_magnetometerCube->rotate().xyz(
-			R2D(imuData.magnetometer.x()) + 360.0f - this->_offset.x(),
-			R2D(imuData.magnetometer.y()) + 360.0f - this->_offset.y(),
-			R2D(imuData.magnetometer.z()) + 360.0f - this->_offset.z()
+		/*
+		this->_accelerometerCube->rotate().xyz(
+			std::asin(a.z() / -GRAVITY),
+			0,
+			std::asin(a.x() / GRAVITY)
 		);
+		 */
 	}
 }
 
 void ImuWindow::draw()
 {
-	VERBOSE("Accelerometer: "
-				<< this->_accelerometerCube->rotate().x() << ":"
-				<< this->_accelerometerCube->rotate().y() << ":"
-				<< this->_accelerometerCube->rotate().z()
+	VERBOSE("Accelerometer angle: "
+		<< this->_accelerometerCube->rotate().x() << ":"
+		<< this->_accelerometerCube->rotate().y() << ":"
+		<< this->_accelerometerCube->rotate().z()
 	);
+	/*
 	VERBOSE("Gyro: "
 				<< this->_gyroCube->rotate().x() << ":"
 				<< this->_gyroCube->rotate().y() << ":"
@@ -86,6 +101,7 @@ void ImuWindow::draw()
 				<< this->_magnetometerCube->rotate().y() << ":"
 				<< this->_magnetometerCube->rotate().z()
 	);
+	 */
 	this->_stage.draw();
 }
 
@@ -96,6 +112,9 @@ void ImuWindow::calibrate()
 
 void ImuWindow::offset()
 {
-	data::Imu imuData = this->imu.retrieve();
-	this->_offset = imuData.magnetometer;
+	/*
+	this->_offsetAccelerometer.x(this->_accelerometerCube->rotate().x());
+	this->_offsetAccelerometer.y(this->_accelerometerCube->rotate().y());
+	this->_offsetAccelerometer.z(this->_accelerometerCube->rotate().z());
+	*/
 }

@@ -6,6 +6,8 @@
 #ifndef VISUALIZER_VECTOR_H
 #define VISUALIZER_VECTOR_H
 
+#include <algorithm>
+
 namespace data
 {
 template<typename T>
@@ -76,6 +78,12 @@ public:
 	virtual void z(T z)
 	{
 		this->_z = z;
+	}
+
+	void normalize()
+	{
+		T m = std::max(this->_x, std::max(this->_y, this->_z));
+		this->xyz(this->_x / m, this->_y / m, this->_z / m);
 	}
 
 	Vector3<T> &operator=(const Vector3<T> &source)

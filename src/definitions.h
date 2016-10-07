@@ -12,8 +12,10 @@
 #define __FILENAME__ __FILE__
 #endif
 
+#define GRAVITY 9.98
+
 #ifdef DEBUG
-#define VERBOSE_HEADER "[VERBOSE] " << __FILENAME__ << ":" << __LINE__ << ") "
+#define VERBOSE_HEADER "[VERBOSE] " << /*__FILENAME__ <<*/ ":" << __LINE__ << ") "
 #define VERBOSE(x) std::cout << VERBOSE_HEADER << x << std::endl
 #define VERBOSENEL(x) std::cout << VERBOSE_HEADER << x
 #define VERBOSEDATA(d, s) Channel::dumpData(d, s)

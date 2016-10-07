@@ -20,7 +20,7 @@ private:
 	bool _initialized;
 	bool _running;
 
-	data::Vector3d _offset;
+	data::Vector3d _offsetAccelerometer;
 
 	elements::Cube *_accelerometerCube;
 	elements::Cube *_gyroCube;
